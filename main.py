@@ -19,7 +19,7 @@ def main(width=1000, height=1000):
 
     # convert all the images to png format
     for i in range(len(images)):
-        images[i].save(f'output/{i}.png')
+        images[i].save(f'output/{i+1}.png')
 
 if __name__ == '__main__':
     main()
