@@ -7,6 +7,9 @@ def main(width=1000, height=1000):
     images = []
 
     for filename in os.listdir('images'):
+        # ignore non-image files
+        if not filename.endswith('.jpg') and not filename.endswith('.jpeg') and not filename.endswith('.png'):
+            continue
         img = Image.open(f'images/{filename}')
         images.append(img)
 
