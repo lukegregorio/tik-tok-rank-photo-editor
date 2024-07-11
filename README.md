@@ -1,3 +1,5 @@
+# Image to Compressed PNG For TikTok Filters
+
 ## Instructions
 1. Clone the repository
 2. Run the following command to install the dependencies
