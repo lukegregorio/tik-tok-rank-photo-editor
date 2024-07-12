@@ -58,4 +58,4 @@ def main(image_width=300, image_height=300, add_name=False, text_size=40, text_c
         image.save(f'output/{name}.jpg')
 
 if __name__ == '__main__':
-    main(add_name=True)
+    main()
