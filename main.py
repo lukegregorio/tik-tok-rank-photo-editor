@@ -2,20 +2,20 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 
 
-def add_text_to_image(image, text, text_size=20, text_color='white', outline_width=2, outline_color='red', font_path='my_font.ttf'):
+def add_text_to_image(image, text, text_size=40, text_color='white', outline_width=2, outline_color='red', font_path='my_font.ttf'):
 
     # create a drawing object
     draw = ImageDraw.Draw(image)
 
     # create a font object
-    font = ImageFont.truetype(font_path)
+    font = ImageFont.truetype(font_path, text_size)
 
     # get the width and height of the text
     text_width = draw.textlength(text, font)
     
     # set position of the text at the centre and bottom of the image
     x = (image.width - text_width) / 2
-    y = image.height - text_size - 10 # 10 pixels from the bottom
+    y = image.height - text_size -  5
 
     # Draw the outline
     for dx in range(-outline_width, outline_width + 1):
@@ -24,12 +24,12 @@ def add_text_to_image(image, text, text_size=20, text_color='white', outline_wid
                 draw.text((x + dx, y + dy), text, font=font, fill=outline_color)
     
     # Draw the text
-    draw.text((x, y), text, font=font, fill=text_color, )
+    draw.text((x, y), text, font=font, fill=text_color)
 
     return image
 
 
-def main(image_width=200, image_height=200, add_name=False, text_size=20, text_color='white', outline_width=2, outline_color='red', font_path='my_font.ttf'):
+def main(image_width=300, image_height=300, add_name=False, text_size=40, text_color='white', outline_width=2, outline_color='red', font_path='my_font.ttf'):
 
     # empty the output folder except for the .gitkeep file
     for filename in os.listdir('output'):
@@ -45,7 +45,7 @@ def main(image_width=200, image_height=200, add_name=False, text_size=20, text_c
         image = Image.open(f'images/{filename}')
         name = filename.split('\\')[-1].split('.')[0]
 
-        # amend all the images to have the same size 1000x1000
+        # amend all the images to have the same size
         image = image.resize((image_width, image_height))
 
         # add name to the images
