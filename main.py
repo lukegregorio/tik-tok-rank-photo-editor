@@ -3,6 +3,12 @@ import os
 
 
 def main(width=1000, height=1000):
+
+    # empty the output folder except for the .gitkeep file
+    for filename in os.listdir('output'):
+        if filename != '.gitkeep':
+            os.remove(f'output/{filename}')
+
     # open image files in images folder and save them in a list
     images = []
 
@@ -17,9 +23,12 @@ def main(width=1000, height=1000):
     for i in range(len(images)):
         images[i] = images[i].resize((width, height))
 
-    # convert all the images to png format
+    # convert all the images to jpg format
     for i in range(len(images)):
-        images[i].save(f'output/{i+1}.png')
+        if images[i].mode in ("RGBA", "P"):
+            images[i] = images[i].convert("RGB")
+
+        images[i].save(f'output/{i}.jpg')
 
 if __name__ == '__main__':
     main()
