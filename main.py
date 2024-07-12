@@ -1,34 +1,61 @@
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import os
 
 
-def main(width=1000, height=1000):
+def add_text_to_image(image, text, text_size=20, text_color='white', outline_width=2, outline_color='red', font_path='my_font.ttf'):
+
+    # create a drawing object
+    draw = ImageDraw.Draw(image)
+
+    # create a font object
+    font = ImageFont.truetype(font_path)
+
+    # get the width and height of the text
+    text_width = draw.textlength(text, font)
+    
+    # set position of the text at the centre and bottom of the image
+    x = (image.width - text_width) / 2
+    y = image.height - text_size - 10 # 10 pixels from the bottom
+
+    # Draw the outline
+    for dx in range(-outline_width, outline_width + 1):
+        for dy in range(-outline_width, outline_width + 1):
+            if dx != 0 or dy != 0:
+                draw.text((x + dx, y + dy), text, font=font, fill=outline_color)
+    
+    # Draw the text
+    draw.text((x, y), text, font=font, fill=text_color, )
+
+    return image
+
+
+def main(image_width=200, image_height=200, add_name=False, text_size=20, text_color='white', outline_width=2, outline_color='red', font_path='my_font.ttf'):
 
     # empty the output folder except for the .gitkeep file
     for filename in os.listdir('output'):
         if filename != '.gitkeep':
             os.remove(f'output/{filename}')
 
-    # open image files in images folder and save them in a list
-    images = []
-
     for filename in os.listdir('images'):
+
         # ignore non-image files
         if not filename.endswith('.jpg') and not filename.endswith('.jpeg') and not filename.endswith('.png'):
             continue
-        img = Image.open(f'images/{filename}')
-        images.append(img)
 
-    # amend all the images to have the same size 1000x1000
-    for i in range(len(images)):
-        images[i] = images[i].resize((width, height))
+        image = Image.open(f'images/{filename}')
+        name = filename.split('\\')[-1].split('.')[0]
 
-    # convert all the images to jpg format
-    for i in range(len(images)):
-        if images[i].mode in ("RGBA", "P"):
-            images[i] = images[i].convert("RGB")
+        # amend all the images to have the same size 1000x1000
+        image = image.resize((image_width, image_height))
 
-        images[i].save(f'output/{i}.jpg')
+        # add name to the images
+        if add_name:
+            image = add_text_to_image(image, name, text_size, text_color, outline_width, outline_color, font_path)
+
+        # convert the image to jpg format
+        if image.mode in ("RGBA", "P"):
+            image = image.convert("RGB")
+        image.save(f'output/{name}.jpg')
 
 if __name__ == '__main__':
-    main()
+    main(add_name=True)
